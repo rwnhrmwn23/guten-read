@@ -13,8 +13,14 @@ class BottomNav extends StatelessWidget {
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedLabelStyle: const TextStyle(fontSize: 12),
-        unselectedLabelStyle: const TextStyle(fontSize: 12),
+        selectedLabelStyle: TextStyle(
+          fontSize: 12,
+          fontFamily: 'AvenirNext',
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 12,
+          fontFamily: 'AvenirNext',
+        ),
         selectedItemColor: Color(0xFFDE7773),
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex(location),
@@ -32,9 +38,18 @@ class BottomNav extends StatelessWidget {
           }
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search_rounded), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.book_rounded), label: 'Collection'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_rounded),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search_rounded),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book_rounded),
+            label: 'Collection',
+          ),
         ],
       ),
     );
