@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../utils/formatter.dart';
 import '../../../providers/book_infinity_providers.dart';
@@ -26,7 +27,8 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
       final isLoading = ref.read(isLoadingMoreProvider);
       if (!isLoading) {
         ref.read(isLoadingMoreProvider.notifier).state = true;
-        ref.read(bookPaginationProvider('popular').notifier)
+        ref
+            .read(bookPaginationProvider('popular').notifier)
             .fetchNextPage()
             .then((_) {
               ref.read(isLoadingMoreProvider.notifier).state = false;
@@ -53,7 +55,11 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
             'Popular Books',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              fontFamily: 'AvenirNext',
+            ),
           ),
         ),
         bookState.when(
@@ -76,83 +82,90 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                     final book = books[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                book.imageUrl,
-                                width: 60,
-                                height: 90,
-                                fit: BoxFit.cover,
-                                errorBuilder:
-                                    (context, error, stackTrace) => Container(
-                                      width: 60,
-                                      height: 90,
-                                      color: Colors.grey.shade300,
-                                      child: const Icon(Icons.broken_image),
-                                    ),
+                      child: InkWell(
+                        onTap: () {
+                          context.push('/detail/${book.id}', extra: book);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    book.title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      fontFamily: 'AvenirNext',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    book.author,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[600],
-                                      fontFamily: 'AvenirNext',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.menu_book_outlined,
-                                        color: Colors.redAccent,
-                                        size: 14,
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  book.imageUrl,
+                                  width: 60,
+                                  height: 90,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, error, stackTrace) => Container(
+                                        width: 60,
+                                        height: 90,
+                                        color: Colors.grey.shade300,
+                                        child: const Icon(Icons.broken_image),
                                       ),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        '${formatNumber(book.downloadCount)} Downloads',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.grey[600],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      book.title,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        fontFamily: 'AvenirNext',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      book.author,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                        fontFamily: 'AvenirNext',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.menu_book_outlined,
+                                          color: Colors.redAccent,
+                                          size: 14,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '${formatNumber(book.downloadCount)} Downloads',
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );

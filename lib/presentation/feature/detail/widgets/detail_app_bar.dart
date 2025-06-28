@@ -1,9 +1,11 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({super.key});
+class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const DetailAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: Container(
         padding: EdgeInsets.only(top: Platform.isIOS ? statusBarHeight : preferredSize.height / 2),
+        height: preferredSize.height + (Platform.isIOS ? statusBarHeight : preferredSize.height / 2),
         decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -26,16 +29,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         ),
-        height: preferredSize.height + (Platform.isIOS ? statusBarHeight : preferredSize.height / 2),
-        alignment: Alignment.center,
-        child: const Text(
-          'Guten Read',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFDE7773),
-            fontFamily: 'AvenirNext',
+        alignment: Alignment.centerLeft,
+        child: IconButton(
+          icon: Icon(
+            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            color: Colors.black,
           ),
+          onPressed: () => context.go('/'),
         ),
       ),
     );

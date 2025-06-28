@@ -37,7 +37,7 @@ extension BookModelMapper on BookModel {
     return Book(
       id: id,
       title: title,
-      summary: summaries.isNotEmpty ? summaries[0] : 'No summary available',
+      summary: summaries.isNotEmpty ? summaries[0] : 'No overview available',
       imageUrl: formats["image/jpeg"] ?? '',
       textUrl: formats["text/html"] ?? '',
       author: authors.isNotEmpty ? authors[0].name : 'Unknown',

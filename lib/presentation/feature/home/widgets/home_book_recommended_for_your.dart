@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../providers/book_providers.dart';
 import 'home_book_error.dart';
@@ -35,27 +36,32 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final book = list[index];
-                    return SizedBox(
-                      width: 100,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 3 / 4,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                book.imageUrl,
-                                fit: BoxFit.fill,
-                                errorBuilder:
-                                    (context, error, stackTrace) => Container(
-                                      color: Colors.grey.shade300,
-                                      child: Icon(Icons.broken_image),
-                                    ),
+                    return InkWell(
+                      onTap: () {
+                        context.push('/detail/${book.id}', extra: book);
+                      },
+                      child: SizedBox(
+                        width: 100,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            AspectRatio(
+                              aspectRatio: 3 / 4,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  book.imageUrl,
+                                  fit: BoxFit.fill,
+                                  errorBuilder:
+                                      (context, error, stackTrace) => Container(
+                                        color: Colors.grey.shade300,
+                                        child: Icon(Icons.broken_image),
+                                      ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
