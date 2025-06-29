@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gutenread/domain/entities/book.dart';
+import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../widgets/detail_app_bar.dart';
 import '../widgets/detail_full_overview.dart';
 
@@ -30,15 +31,14 @@ class _DetailPageState extends State<DetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Book cover
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    widget.book.imageUrl,
+                  child: CachedNetworkImageWidget(
+                    imageUrl: widget.book.imageUrl,
                     height: 250,
-                    fit: BoxFit.cover,
-                  ),
+                    width: 165,
+                  )
                 ),
               ),
               const SizedBox(height: 20),

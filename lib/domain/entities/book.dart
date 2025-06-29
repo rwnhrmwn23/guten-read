@@ -8,6 +8,7 @@ class Book {
   final String birthYear;
   final String deathYear;
   final int downloadCount;
+  final bool isFavorite;
 
   const Book({
     required this.id,
@@ -19,5 +20,6 @@ class Book {
     required this.birthYear,
     required this.deathYear,
     required this.downloadCount,
+    this.isFavorite = false
   });
 }

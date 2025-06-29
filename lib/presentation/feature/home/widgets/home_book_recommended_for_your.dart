@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../../../providers/book_providers.dart';
 import 'home_book_error.dart';
 
@@ -49,15 +50,9 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
                               aspectRatio: 3 / 4,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  book.imageUrl,
-                                  fit: BoxFit.fill,
-                                  errorBuilder:
-                                      (context, error, stackTrace) => Container(
-                                        color: Colors.grey.shade300,
-                                        child: Icon(Icons.broken_image),
-                                      ),
-                                ),
+                                child: CachedNetworkImageWidget(
+                                  imageUrl: book.imageUrl,
+                                )
                               ),
                             ),
                           ],

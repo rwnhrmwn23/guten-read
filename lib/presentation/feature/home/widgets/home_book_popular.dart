@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../../../../utils/formatter.dart';
+import '../../../../utils/network_checker.dart';
 import '../../../providers/book_infinity_providers.dart';
 
 class HomeBookPopular extends ConsumerStatefulWidget {
@@ -15,25 +18,41 @@ class HomeBookPopular extends ConsumerStatefulWidget {
 }
 
 class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
+
+  double _lastOffset = 0;
+
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_onScroll);
   }
 
-  void _onScroll() {
+  void _onScroll() async {
     final position = widget.scrollController.position;
+
+    if (position.pixels <= _lastOffset) {
+      _lastOffset = position.pixels;
+      return;
+    }
+
+    _lastOffset = position.pixels;
+
     if (position.pixels >= position.maxScrollExtent - 300) {
       final isLoading = ref.read(isLoadingMoreProvider);
-      if (!isLoading) {
-        ref.read(isLoadingMoreProvider.notifier).state = true;
-        ref
-            .read(bookPaginationProvider('popular').notifier)
-            .fetchNextPage()
-            .then((_) {
-              ref.read(isLoadingMoreProvider.notifier).state = false;
-            });
+      if (isLoading) return;
+
+      if (!NetworkChecker.isConnected) {
+        Fluttertoast.showToast(
+          msg: "You're offline. No more data loaded",
+          backgroundColor: Colors.redAccent,
+          textColor: Colors.white,
+        );
+        return;
       }
+
+      ref.read(isLoadingMoreProvider.notifier).state = true;
+      await ref.read(bookPaginationProvider('popular').notifier).fetchNextPage();
+      ref.read(isLoadingMoreProvider.notifier).state = false;
     }
   }
 
@@ -103,18 +122,10 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  book.imageUrl,
+                                child: CachedNetworkImageWidget(
+                                  imageUrl: book.imageUrl,
                                   width: 60,
                                   height: 90,
-                                  fit: BoxFit.cover,
-                                  errorBuilder:
-                                      (context, error, stackTrace) => Container(
-                                        width: 60,
-                                        height: 90,
-                                        color: Colors.grey.shade300,
-                                        child: const Icon(Icons.broken_image),
-                                      ),
                                 ),
                               ),
                               const SizedBox(width: 12),
