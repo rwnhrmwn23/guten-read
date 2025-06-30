@@ -16,4 +16,14 @@ class BookRemoteDataSource {
     );
     return BookResponse.fromJson(response.data);
   }
+
+  Future<BookResponse> searchBooks({
+    String? query,
+  }) async {
+    final response = await dio.get(
+      'https://gutendex.com/books',
+      queryParameters: {'search': query},
+    );
+    return BookResponse.fromJson(response.data);
+  }
 }

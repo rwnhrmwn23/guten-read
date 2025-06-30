@@ -1,6 +1,7 @@
 import 'package:gutenread/domain/entities/book.dart';
 
 abstract class BookRepository {
+  Future<List<Book>> searchBooks(String query);
   Future<List<Book>> getBooks({String sort, int? page});
   Future<Book?> getDetailBookById(int bookId);
   Future<List<Book>> getFavoriteBooks();

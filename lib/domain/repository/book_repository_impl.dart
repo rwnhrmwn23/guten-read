@@ -34,6 +34,33 @@ class BookRepositoryImpl implements BookRepository {
   }
 
   @override
+  Future<List<Book>> searchBooks(String query) async {
+    await Future.delayed(const Duration(milliseconds: 700));
+    await local.insertSearchHistory(query);
+    final localResults = await local.getBookBySearch(query);
+
+    if (localResults.isNotEmpty) {
+      return localResults.map((e) => e.toEntity()).toList();
+    }
+
+    try {
+      final remoteResponse = await remote.searchBooks(query: query);
+      final books = remoteResponse.results;
+
+      final localModels = books.map((book) {
+        final entity = book.toEntity();
+        return BookCollection().fromEntity(entity, 'search');
+      }).toList();
+
+      await local.insertBooks(localModels);
+
+      return books.map((e) => e.toEntity()).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  @override
   Future<Book?> getDetailBookById(int bookId) async {
     final localData = await local.getDetailBookById(bookId);
     return localData?.toEntity();

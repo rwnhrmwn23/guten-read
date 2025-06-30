@@ -1,4 +1,5 @@
 import 'package:gutenread/data/resources/local/collection/book_meta_collection.dart';
+import 'package:gutenread/data/resources/local/collection/search_history_collection.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,6 +21,7 @@ class BookLocalDataSource {
     _isar = await Isar.open([
       BookCollectionSchema,
       BookMetaCollectionSchema,
+      SearchHistoryCollectionSchema,
     ], directory: dir.path);
     return _isar!;
   }
@@ -52,6 +54,17 @@ class BookLocalDataSource {
         .findAll();
   }
 
+  Future<List<BookCollection>> getBookBySearch(String query) async {
+    final isar = await openIsar();
+    return isar.bookCollections
+        .filter()
+        .titleContains(query, caseSensitive: false)
+        .or()
+        .authorContains(query, caseSensitive: false)
+        .sortByDownloadCountDesc()
+        .findAll();
+  }
+
   Future<BookCollection?> getDetailBookById(int bookId) async {
     final isar = await openIsar();
     return await isar.bookCollections
@@ -62,10 +75,7 @@ class BookLocalDataSource {
 
   Future<List<BookCollection>> getFavoriteBooks() async {
     final isar = await openIsar();
-    return isar.bookCollections
-        .filter()
-        .isFavoriteEqualTo(true)
-        .findAll();
+    return isar.bookCollections.filter().isFavoriteEqualTo(true).findAll();
   }
 
   Future<void> toggleFavorite(int bookId) async {
@@ -107,5 +117,35 @@ class BookLocalDataSource {
             .findFirst();
 
     return meta?.lastPage ?? 0;
+  }
+
+  Future<void> insertSearchHistory(String query) async {
+    final isar = await openIsar();
+    final searchHistoryCollections = SearchHistoryCollection()..query = query;
+
+    final exists =
+        await isar.searchHistoryCollections
+            .filter()
+            .queryEqualTo(query)
+            .isNotEmpty();
+
+    await isar.writeTxn(() async {
+      if (!exists) {
+        await isar.searchHistoryCollections.put(searchHistoryCollections);
+      }
+    });
+  }
+
+  Future<List<SearchHistoryCollection>> getRecentSearches() async {
+    final isar = await openIsar();
+    return await isar.searchHistoryCollections.where().findAll();
+  }
+
+  Future<void> deleteSearchQuery(int id) async {
+    final isar = await openIsar();
+
+    await isar.writeTxn(() async {
+      await isar.searchHistoryCollections.delete(id);
+    });
   }
 }
