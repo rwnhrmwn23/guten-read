@@ -39,7 +39,7 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
                     final book = list[index];
                     return InkWell(
                       onTap: () {
-                        context.push('/detail/${book.id}', extra: book);
+                        context.push('/detail/${book.id}', extra: book.id);
                       },
                       child: SizedBox(
                         width: 100,

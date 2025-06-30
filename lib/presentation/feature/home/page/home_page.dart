@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../widgets/home_app_bar.dart';
+import '../../../../shared/widgets/home_app_bar.dart';
 import '../widgets/home_book_popular.dart';
 import '../widgets/home_book_recommended_for_your.dart';
 

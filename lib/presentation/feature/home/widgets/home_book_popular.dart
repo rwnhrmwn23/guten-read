@@ -103,7 +103,7 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: InkWell(
                         onTap: () {
-                          context.push('/detail/${book.id}', extra: book);
+                          context.push('/detail/${book.id}', extra: book.id);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -167,7 +167,7 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                                           '${formatNumber(book.downloadCount)} Downloads',
                                           style: TextStyle(
                                             fontSize: 11,
-                                            color: Colors.grey[600],
+                                            color: Colors.grey,
                                           ),
                                         ),
                                       ],

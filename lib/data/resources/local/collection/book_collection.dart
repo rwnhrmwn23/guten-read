@@ -1,11 +1,11 @@
 import 'package:isar/isar.dart';
 
-import '../../domain/entities/book.dart';
+import '../../../../domain/entities/book.dart';
 
-part 'book_local_model.g.dart';
+part 'book_collection.g.dart';
 
 @collection
-class BookLocalModel {
+class BookCollection {
   Id id = Isar.autoIncrement;
 
   late int bookId;
@@ -22,7 +22,7 @@ class BookLocalModel {
   late String section;
 }
 
-extension BookLocalMapper on BookLocalModel {
+extension BookLocalMapper on BookCollection {
   Book toEntity() {
     return Book(
       id: bookId,
@@ -38,8 +38,8 @@ extension BookLocalMapper on BookLocalModel {
     );
   }
 
-  BookLocalModel fromEntity(Book book, String section) {
-    return BookLocalModel()
+  BookCollection fromEntity(Book book, String section) {
+    return BookCollection()
       ..bookId = book.id
       ..title = book.title
       ..summary = book.summary

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gutenread/data/repository/book_repository.dart';
 import 'package:gutenread/data/resources/local/book_local_data_source.dart';
 import 'package:gutenread/data/resources/remote/book_remote_data_source.dart';
 import 'package:gutenread/domain/entities/book.dart';
@@ -16,7 +17,7 @@ final bookLocalDataSourceProvider = Provider<BookLocalDataSource>((ref) {
   return BookLocalDataSource();
 });
 
-final bookRepositoryProvider = Provider<BookRepositoryImpl>((ref) {
+final bookRepositoryProvider = Provider<BookRepository>((ref) {
   final remote = ref.watch(bookRemoteDataSourceProvider);
   final local = ref.watch(bookLocalDataSourceProvider);
   return BookRepositoryImpl(remote: remote, local: local);
@@ -25,4 +26,19 @@ final bookRepositoryProvider = Provider<BookRepositoryImpl>((ref) {
 final bookListProvider = FutureProvider.family<List<Book>, String>((ref, sort) async {
   final repo = ref.watch(bookRepositoryProvider);
   return repo.getBooks(sort: sort);
+});
+
+final bookDetailProvider = FutureProvider.family.autoDispose<Book?, int>((ref, bookId) async {
+  final repo = ref.watch(bookRepositoryProvider);
+  return repo.getDetailBookById(bookId);
+});
+
+final favoriteBooksProvider = FutureProvider.autoDispose<List<Book>>((ref) async {
+  final repo = ref.watch(bookRepositoryProvider);
+  return repo.getFavoriteBooks();
+});
+
+final toggleFavoriteProvider = Provider.family<Future<void> Function(), int>((ref, bookId) {
+  final repo = ref.watch(bookRepositoryProvider);
+  return () => repo.toggleFavorite(bookId);
 });

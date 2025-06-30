@@ -33,7 +33,7 @@ class BottomNav extends StatelessWidget {
               context.go('/search');
               break;
             case 2:
-              context.go('/collection');
+              context.go('/favorite');
               break;
           }
         },
@@ -48,7 +48,7 @@ class BottomNav extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book_rounded),
-            label: 'Collection',
+            label: 'Favorite',
           ),
         ],
       ),
@@ -57,7 +57,7 @@ class BottomNav extends StatelessWidget {
 
   int _currentIndex(String location) {
     if (location.startsWith('/search')) return 1;
-    if (location.startsWith('/collection')) return 2;
+    if (location.startsWith('/favorite')) return 2;
     return 0;
   }
 }

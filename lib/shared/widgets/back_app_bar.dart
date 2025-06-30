@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
-class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DetailAppBar({super.key});
+class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const BackAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,9 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
             Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () => context.go('/'),
+          onPressed: () => {
+            context.pop('/')
+          },
         ),
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../domain/entities/book.dart';
-import '../presentation/feature/collection/page/collection_page.dart';
+
 import '../presentation/feature/detail/page/detail_page.dart';
+import '../presentation/feature/favorite/page/favorite_page.dart';
 import '../presentation/feature/home/page/home_page.dart';
 import '../presentation/feature/search/page/search_page.dart';
 import '../shared/widgets/bottom_nav.dart';
@@ -23,16 +23,16 @@ final routeProvider =Provider<GoRouter>((ref) {
               builder: (context, state) => SearchPage()
           ),
           GoRoute(
-              path: '/collection',
-              builder: (context, state) => CollectionPage()
+              path: '/favorite',
+              builder: (context, state) => FavoritePage()
           ),
         ],
       ),
       GoRoute(
         path: '/detail/:id',
         builder: (context, state) {
-          final book = state.extra as Book;
-          return DetailPage(book: book);
+          final bookId = state.extra as int;
+          return DetailPage(bookId: bookId);
         },
       ),
     ],

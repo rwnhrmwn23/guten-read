@@ -1,9 +1,9 @@
 import 'package:isar/isar.dart';
 
-part 'book_page_meta_model.g.dart';
+part 'book_meta_collection.g.dart';
 
 @collection
-class BookPageMetaModel {
+class BookMetaCollection {
   Id id = Isar.autoIncrement;
 
   @Index(unique: true)
