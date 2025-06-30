@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gutenread/shared/widgets/home_app_bar.dart';
+import '../../../../shared/constants/color_constant.dart';
+import '../../../../shared/constants/text_constant.dart';
 import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../../../providers/search_repository_providers.dart';
 
@@ -80,7 +82,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             // Input Search
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFF8F8F8),
+                color: alabaster,
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -90,8 +92,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     child: TextField(
                       focusNode: _focusNode,
                       controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: 'Search...',
+                      decoration: InputDecoration(
+                        hintText: searchHint,
                         border: InputBorder.none,
                       ),
                       onSubmitted: (_) => _submitSearch(),
@@ -109,11 +111,11 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             if (_showHistory)
               recentSearches.when(
                 loading: () => const CircularProgressIndicator(),
-                error: (e, _) => Text('Error: $e'),
+                error: (e, _) => Text('$error $e'),
                 data: (searches) {
                   if (searches.isEmpty) {
-                    return const Text(
-                      'No recent searches',
+                    return Text(
+                      noSearches,
                       style: TextStyle(color: Colors.grey),
                     );
                   }
@@ -136,10 +138,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                               },
                               child: Text(
                                 item.query,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
-                                  color: Color(0xff1c1c1e),
+                                  color: codGray,
                                 ),
                               ),
                             ),
@@ -166,21 +168,24 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 child: ref
                     .watch(bookSearchProvider(_searchController.text))
                     .when(
-                      loading: () => const Center(child: CircularProgressIndicator()),
-                      error: (e, _) => Center(child: Text('Error: $e')),
+                      loading:
+                          () =>
+                              const Center(child: CircularProgressIndicator()),
+                      error: (e, _) => Center(child: Text('$error $e')),
                       data: (books) {
                         if (books.isEmpty) {
-                          return const Center(child: Text('No results found'));
+                          return Center(child: Text(noResultFound));
                         }
 
                         return ListView.separated(
                           itemCount: books.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 12),
+                          separatorBuilder:
+                              (_, __) => const SizedBox(height: 12),
                           itemBuilder: (context, index) {
                             final book = books[index];
                             return InkWell(
                               onTap: () {
-                                context.push('/detail/${book.id}', extra: book.id);
+                                context.push(routingDetail, extra: book.id);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(12),
@@ -208,16 +213,17 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             book.title,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 14,
-                                              fontFamily: 'AvenirNext',
+                                              fontFamily: fontFamilyApp,
                                             ),
                                           ),
                                           const SizedBox(height: 4),
@@ -228,7 +234,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey[600],
-                                              fontFamily: 'AvenirNext',
+                                              fontFamily: fontFamilyApp,
                                             ),
                                           ),
                                         ],

@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gutenread/shared/widgets/home_app_bar.dart';
 
+import '../../../../shared/constants/style_constant.dart';
+import '../../../../shared/constants/text_constant.dart';
 import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../../../providers/book_providers.dart';
 
@@ -30,6 +32,7 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
 
     return Scaffold(
       appBar: const HomeAppBar(),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
@@ -38,20 +41,13 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
             Expanded(
               child: bookState.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, st) => Center(child: Text('Error: $err')),
+                error: (err, st) => Center(child: Text('$error $err')),
                 data: (books) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (books.isNotEmpty) ...[
-                        Text(
-                          'My Favorite',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            fontFamily: 'AvenirNext',
-                          ),
-                        ),
+                        Text(myFavorite, style: subTitleStyle),
                         SizedBox(height: 12),
                       ],
                       Expanded(
@@ -59,12 +55,8 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                             books.isEmpty
                                 ? Center(
                                   child: Text(
-                                    'No favorite books yet',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                      fontFamily: 'AvenirNext',
-                                    ),
+                                    noFavoriteBooks,
+                                    style: descriptionStyle,
                                   ),
                                 )
                                 : ListView.separated(
@@ -76,10 +68,7 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                     final book = books[index];
                                     return InkWell(
                                       onTap: () async {
-                                        await context.push(
-                                          '/detail/${book.id}',
-                                          extra: book.id,
-                                        );
+                                        await context.push(routingDetail, extra: book.id,);
                                         ref.invalidate(favoriteBooksProvider);
                                       },
                                       child: Container(
@@ -116,10 +105,13 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                             const SizedBox(width: 12),
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
@@ -131,13 +123,8 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                           overflow:
                                                               TextOverflow
                                                                   .ellipsis,
-                                                          style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 14,
-                                                            fontFamily:
-                                                                'AvenirNext',
-                                                          ),
+                                                          style:
+                                                              descriptionBoldStyle,
                                                         ),
                                                       ),
                                                       Positioned(
@@ -196,11 +183,7 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.grey[600],
-                                                      fontFamily: 'AvenirNext',
-                                                    ),
+                                                    style: smallTextStyle,
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
@@ -208,11 +191,7 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.grey,
-                                                      fontFamily: 'AvenirNext',
-                                                    ),
+                                                    style: smallTextStyle,
                                                   ),
                                                 ],
                                               ),

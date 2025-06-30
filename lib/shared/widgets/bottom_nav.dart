@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gutenread/shared/constants/style_constant.dart';
+
+import '../constants/color_constant.dart';
 
 class BottomNav extends StatelessWidget {
   final Widget child;
@@ -13,15 +16,9 @@ class BottomNav extends StatelessWidget {
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedLabelStyle: TextStyle(
-          fontSize: 12,
-          fontFamily: 'AvenirNext',
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: 12,
-          fontFamily: 'AvenirNext',
-        ),
-        selectedItemColor: Color(0xFFDE7773),
+        selectedLabelStyle: smallTextStyle,
+        unselectedLabelStyle: smallTextStyle,
+        selectedItemColor: mainRedColor,
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex(location),
         onTap: (index) {

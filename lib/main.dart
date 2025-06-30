@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gutenread/routes/app_router.dart';
+import 'package:gutenread/shared/constants/text_constant.dart';
 import 'package:gutenread/utils/network_checker.dart';
 
 void main() {
@@ -28,7 +29,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final router = ref.watch(routeProvider);
     return MaterialApp.router(
-      title: 'Gutenread',
+      title: appName,
       theme: ThemeData.light(),
       debugShowCheckedModeBanner: false,
       routerConfig: router,

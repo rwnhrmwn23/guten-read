@@ -33,6 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> with AutomaticKeepAliveClie
     super.build(context);
     return Scaffold(
       appBar: HomeAppBar(),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(

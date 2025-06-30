@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../shared/constants/style_constant.dart';
+import '../../../../shared/constants/text_constant.dart';
+
 class DetailFullOverview extends StatefulWidget {
   final String text;
   final int trimLines;
@@ -22,20 +25,6 @@ class _ReadMoreInlineState extends State<DetailFullOverview>
 
   @override
   Widget build(BuildContext context) {
-    final defaultStyle =
-        widget.style ??
-        TextStyle(
-          fontSize: 15,
-          color: Colors.grey[600],
-          fontFamily: 'AvenirNext',
-        );
-
-    final readMoreStyle = const TextStyle(
-      color: Colors.blueAccent,
-      fontWeight: FontWeight.w600,
-      fontFamily: 'AvenirNext',
-    );
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final span = TextSpan(text: widget.text, style: defaultStyle);
@@ -44,7 +33,7 @@ class _ReadMoreInlineState extends State<DetailFullOverview>
           text: span,
           maxLines: widget.trimLines,
           textDirection: TextDirection.ltr,
-          ellipsis: '...',
+          ellipsis: threeDot,
         );
 
         tp.layout(maxWidth: constraints.maxWidth);
@@ -68,7 +57,7 @@ class _ReadMoreInlineState extends State<DetailFullOverview>
                         text: widget.text,
                         style: defaultStyle,
                         children: [
-                          TextSpan(text: ' Read less', style: readMoreStyle),
+                          TextSpan(text: readLess, style: readMoreStyle),
                         ],
                       ),
                     )
@@ -84,8 +73,8 @@ class _ReadMoreInlineState extends State<DetailFullOverview>
                             style: defaultStyle,
                             children: [
                               TextSpan(text: trimmedText),
-                              const TextSpan(text: '... '),
-                              TextSpan(text: 'Read more', style: readMoreStyle),
+                              TextSpan(text: threeDot),
+                              TextSpan(text: readMore, style: readMoreStyle),
                             ],
                           ),
                         );
@@ -98,7 +87,7 @@ class _ReadMoreInlineState extends State<DetailFullOverview>
   }
 
   String _trimTextToFit(String text, double maxWidth, TextStyle style) {
-    const readMoreText = '... Read more';
+    var readMoreText = readMoreContent;
     final textPainter = TextPainter(
       text: TextSpan(text: text + readMoreText, style: style),
       maxLines: widget.trimLines,

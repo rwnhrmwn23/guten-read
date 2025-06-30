@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/constants/style_constant.dart';
+import '../../../../shared/constants/text_constant.dart';
 import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../../../../utils/formatter.dart';
 import '../../../../utils/network_checker.dart';
@@ -18,7 +20,6 @@ class HomeBookPopular extends ConsumerStatefulWidget {
 }
 
 class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
-
   double _lastOffset = 0;
 
   @override
@@ -43,7 +44,7 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
 
       if (!NetworkChecker.isConnected) {
         Fluttertoast.showToast(
-          msg: "You're offline. No more data loaded",
+          msg: offlineInfo,
           backgroundColor: Colors.redAccent,
           textColor: Colors.white,
         );
@@ -51,7 +52,9 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
       }
 
       ref.read(isLoadingMoreProvider.notifier).state = true;
-      await ref.read(bookPaginationProvider('popular').notifier).fetchNextPage();
+      await ref
+          .read(bookPaginationProvider(popular).notifier)
+          .fetchNextPage();
       ref.read(isLoadingMoreProvider.notifier).state = false;
     }
   }
@@ -64,29 +67,22 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
 
   @override
   Widget build(BuildContext context) {
-    final bookState = ref.watch(bookPaginationProvider('popular'));
+    final bookState = ref.watch(bookPaginationProvider(popular));
     final isLoadingMore = ref.watch(isLoadingMoreProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Text(
-            'Popular Books',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              fontFamily: 'AvenirNext',
-            ),
-          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Text(popularBooks, style: subTitleStyle),
         ),
         bookState.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error:
               (err, st) => Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text('Error: $err'),
+                child: Text('$error $err'),
               ),
           data: (books) {
             return Column(
@@ -103,7 +99,7 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: InkWell(
                         onTap: () {
-                          context.push('/detail/${book.id}', extra: book.id);
+                          context.push(routingDetail, extra: book.id);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -137,22 +133,14 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                                       book.title,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        fontFamily: 'AvenirNext',
-                                      ),
+                                      style: descriptionBoldStyle,
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       book.author,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[600],
-                                        fontFamily: 'AvenirNext',
-                                      ),
+                                      style: smallTextStyle
                                     ),
                                     const SizedBox(height: 8),
                                     Row(
@@ -164,11 +152,8 @@ class _HomeBookPopularState extends ConsumerState<HomeBookPopular> {
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
-                                          '${formatNumber(book.downloadCount)} Downloads',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.grey,
-                                          ),
+                                          '${formatNumber(book.downloadCount)} $downloads',
+                                          style: smallTextStyle
                                         ),
                                       ],
                                     ),

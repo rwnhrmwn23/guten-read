@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/constants/style_constant.dart';
+import '../../../../shared/constants/text_constant.dart';
 import '../../../../shared/widgets/cached_network_image_widget.dart';
 import '../../../providers/book_providers.dart';
 import 'home_book_error.dart';
@@ -12,20 +14,13 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final booksPopular = ref.watch(bookListProvider('ascending'));
+    final booksPopular = ref.watch(bookListProvider(ascending));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Text(
-            'Recommended for you',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              fontFamily: 'AvenirNext',
-            ),
-          ),
+          child: Text(recommendedForYou, style: subTitleStyle),
         ),
         SizedBox(
           height: 150,
@@ -39,7 +34,7 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
                     final book = list[index];
                     return InkWell(
                       onTap: () {
-                        context.push('/detail/${book.id}', extra: book.id);
+                        context.push(routingDetail, extra: book.id);
                       },
                       child: SizedBox(
                         width: 100,
@@ -52,7 +47,7 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                                 child: CachedNetworkImageWidget(
                                   imageUrl: book.imageUrl,
-                                )
+                                ),
                               ),
                             ),
                           ],
@@ -66,15 +61,12 @@ class HomeBookRecommendedForYour extends ConsumerWidget {
             error: (error, stackTrace) {
               if (error is DioException) {
                 if (error.response?.statusCode == 404) {
-                  return HomeBookError(errorText: 'Book not found (404).');
+                  return HomeBookError(errorText: bookNotFound);
                 } else {
-                  return HomeBookError(
-                    errorText:
-                        'Oops! Something went wrong: No Intenet Connection',
-                  );
+                  return HomeBookError(errorText: oopsSomethingWrongConnection);
                 }
               }
-              return HomeBookError(errorText: 'Unexpected error: $error');
+              return HomeBookError(errorText: '$unexpectedError $error');
             },
           ),
         ),

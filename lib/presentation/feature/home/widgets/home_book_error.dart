@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../shared/constants/text_constant.dart';
+
 class HomeBookError extends StatelessWidget {
   final String? errorText;
 
@@ -11,7 +13,7 @@ class HomeBookError extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Text(
         errorText.toString(),
-        style: TextStyle(fontFamily: 'AvenirNext'),
+        style: TextStyle(fontFamily: fontFamilyApp),
       ),
     );
   }

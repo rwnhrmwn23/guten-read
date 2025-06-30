@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../shared/constants/style_constant.dart';
+import '../../../../shared/constants/text_constant.dart';
 import '../../../../shared/widgets/cached_network_image_widget.dart';
+import '../../../../utils/formatter.dart';
 import '../../../providers/book_providers.dart';
 import '../../../../shared/widgets/back_app_bar.dart';
 import '../widgets/detail_full_overview.dart';
@@ -17,7 +20,6 @@ class DetailPage extends ConsumerStatefulWidget {
 }
 
 class _DetailPageState extends ConsumerState<DetailPage> {
-
   @override
   Widget build(BuildContext context) {
     final bookAsync = ref.watch(bookDetailProvider(widget.bookId));
@@ -31,6 +33,7 @@ class _DetailPageState extends ConsumerState<DetailPage> {
         data: (book) {
           return Scaffold(
             appBar: const BackAppBar(),
+            backgroundColor: Colors.white,
             body: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
               child: Column(
@@ -47,33 +50,12 @@ class _DetailPageState extends ConsumerState<DetailPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    book.title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'AvenirNext',
-                    ),
-                  ),
-                  Text(
-                    '${book.author} (${book.birthYear} - ${book.deathYear})',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontFamily: 'AvenirNext',
-                    ),
-                  ),
+                  Text(book.title, style: titleStyle),
+                  Text(authorAndYearInfo(book), style: descriptionStyle),
                   const SizedBox(height: 8),
                   const Divider(),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Overview',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'AvenirNext',
-                    ),
-                  ),
+                  Text(overview, style: subTitleStyle),
                   const SizedBox(height: 8),
                   DetailFullOverview(text: book.summary),
                 ],
@@ -96,9 +78,8 @@ class _DetailPageState extends ConsumerState<DetailPage> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => Center(child: Text('$error $e')),
       ),
     );
   }
-
 }

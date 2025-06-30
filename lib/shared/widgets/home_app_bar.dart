@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../constants/style_constant.dart';
+import '../constants/text_constant.dart';
+
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
@@ -15,7 +18,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
       child: Container(
-        padding: EdgeInsets.only(top: Platform.isIOS ? statusBarHeight : preferredSize.height / 2),
+        padding: EdgeInsets.only(
+          top: Platform.isIOS ? statusBarHeight : preferredSize.height / 2,
+        ),
         decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -28,15 +33,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         height: preferredSize.height + (Platform.isIOS ? statusBarHeight : preferredSize.height / 2),
         alignment: Alignment.center,
-        child: const Text(
-          'Guten Read',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFDE7773),
-            fontFamily: 'AvenirNext',
-          ),
-        ),
+        child: Text(gutenread, style: subTitleRedStyle),
       ),
     );
   }

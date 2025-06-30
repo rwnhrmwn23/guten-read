@@ -3,6 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
+import '../shared/constants/text_constant.dart';
+
 class NetworkChecker {
   static final Connectivity _connectivity = Connectivity();
   static StreamSubscription<List<ConnectivityResult>>? _subscription;
@@ -15,13 +17,13 @@ class NetworkChecker {
       _hasConnection = results.isNotEmpty && !results.contains(ConnectivityResult.none);
       if (!_hasConnection && showToast) {
         Fluttertoast.showToast(
-          msg: "Network Error : Please check your connection",
+          msg: networkOffline,
           backgroundColor: Colors.redAccent,
           textColor: Colors.white,
         );
       } else {
         Fluttertoast.showToast(
-          msg: "You're online",
+          msg: networkOnline,
           backgroundColor: Colors.greenAccent,
           textColor: Colors.white,
         );
