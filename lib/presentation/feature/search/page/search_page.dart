@@ -5,9 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gutenread/shared/widgets/home_app_bar.dart';
 import '../../../../shared/constants/color_constant.dart';
+import '../../../../shared/constants/style_constant.dart';
 import '../../../../shared/constants/text_constant.dart';
 import '../../../../shared/widgets/cached_network_image_widget.dart';
-import '../../../providers/search_repository_providers.dart';
+import '../../../providers/search_providers.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -174,7 +175,15 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       error: (e, _) => Center(child: Text('$error $e')),
                       data: (books) {
                         if (books.isEmpty) {
-                          return Center(child: Text(noResultFound));
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(imageBook, width: 150),
+                                Text(noBookFound, style: descriptionBoldStyle),
+                              ],
+                            ),
+                          );
                         }
 
                         return ListView.separated(

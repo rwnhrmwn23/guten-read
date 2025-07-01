@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gutenread/shared/widgets/home_app_bar.dart';
@@ -17,14 +16,6 @@ class FavoritePage extends ConsumerStatefulWidget {
 }
 
 class _FavoritePage extends ConsumerState<FavoritePage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      ref.invalidate(favoriteBooksProvider);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,24 +41,34 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Text(myFavorite, style: subTitleStyle),
                       ),
+                      SizedBox(height: 16),
                     ],
                     Expanded(
                       child:
                           books.isEmpty
                               ? Center(
-                                child: Text(
-                                  noFavoriteBooks,
-                                  style: descriptionStyle,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(imageBook, width: 150),
+                                    Text(
+                                      noFavoriteBooks,
+                                      style: descriptionBoldStyle,
+                                    ),
+                                  ],
                                 ),
-                              ) :
-                          ListView.separated(
+                              )
+                              : ListView.separated(
                                 itemCount: books.length,
-                                separatorBuilder: (_, __) => const SizedBox(height: 16),
+                                separatorBuilder:
+                                    (_, __) => const SizedBox(height: 16),
                                 padding: const EdgeInsets.only(bottom: 16),
                                 itemBuilder: (context, index) {
                                   final book = books[index];
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal:  16.0),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                    ),
                                     child: InkWell(
                                       onTap: () async {
                                         await context.push(
@@ -80,7 +81,9 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.black12,
@@ -96,11 +99,12 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                 ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(8),
-                                                  child: CachedNetworkImageWidget(
-                                                    imageUrl: book.imageUrl,
-                                                    width: 60,
-                                                    height: 90,
-                                                  ),
+                                                  child:
+                                                      CachedNetworkImageWidget(
+                                                        imageUrl: book.imageUrl,
+                                                        width: 60,
+                                                        height: 90,
+                                                      ),
                                                 ),
                                               ],
                                             ),
@@ -112,7 +116,8 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                 children: [
                                                   Row(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
@@ -167,7 +172,8 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                                   Colors
                                                                       .redAccent,
                                                               padding:
-                                                                  EdgeInsets.zero,
+                                                                  EdgeInsets
+                                                                      .zero,
                                                               constraints:
                                                                   const BoxConstraints(),
                                                               splashRadius: 16,

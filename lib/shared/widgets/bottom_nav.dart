@@ -54,8 +54,8 @@ class BottomNav extends StatelessWidget {
   }
 
   int _currentIndex(String location) {
-    if (location.startsWith('/search')) return 1;
-    if (location.startsWith('/favorite')) return 2;
+    if (location.startsWith(routingSearch)) return 1;
+    if (location.startsWith(routingFavorite)) return 2;
     return 0;
   }
 }

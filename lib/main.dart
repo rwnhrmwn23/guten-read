@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gutenread/routes/app_router.dart';
 import 'package:gutenread/shared/constants/text_constant.dart';
-import 'package:gutenread/utils/network_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+  final hasFinished = prefs.getBool('hasFinishedOnboarding') ?? false;
+
+  final router = createRouter(hasFinishedOnboarding: hasFinished);
+
+  runApp(ProviderScope(child: MyApp(router: router)));
 }
 
-class MyApp extends ConsumerStatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  final GoRouter router;
 
-  @override
-  ConsumerState<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends ConsumerState<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      NetworkChecker.startListening();
-    });
-  }
+  const MyApp({super.key, required this.router});
 
   @override
   Widget build(BuildContext context) {
-    final router = ref.watch(routeProvider);
     return MaterialApp.router(
       title: appName,
       theme: ThemeData.light(),
