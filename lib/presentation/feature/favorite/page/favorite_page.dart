@@ -33,51 +33,54 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
     return Scaffold(
       appBar: const HomeAppBar(),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: bookState.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, st) => Center(child: Text('$error $err')),
-                data: (books) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (books.isNotEmpty) ...[
-                        Text(myFavorite, style: subTitleStyle),
-                        SizedBox(height: 12),
-                      ],
-                      Expanded(
-                        child:
-                            books.isEmpty
-                                ? Center(
-                                  child: Text(
-                                    noFavoriteBooks,
-                                    style: descriptionStyle,
-                                  ),
-                                )
-                                : ListView.separated(
-                                  itemCount: books.length,
-                                  separatorBuilder:
-                                      (_, __) => const SizedBox(height: 16),
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  itemBuilder: (context, index) {
-                                    final book = books[index];
-                                    return InkWell(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: bookState.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, st) => Center(child: Text('$error $err')),
+              data: (books) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (books.isNotEmpty) ...[
+                      SizedBox(height: 16),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(myFavorite, style: subTitleStyle),
+                      ),
+                    ],
+                    Expanded(
+                      child:
+                          books.isEmpty
+                              ? Center(
+                                child: Text(
+                                  noFavoriteBooks,
+                                  style: descriptionStyle,
+                                ),
+                              ) :
+                          ListView.separated(
+                                itemCount: books.length,
+                                separatorBuilder: (_, __) => const SizedBox(height: 16),
+                                padding: const EdgeInsets.only(bottom: 16),
+                                itemBuilder: (context, index) {
+                                  final book = books[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal:  16.0),
+                                    child: InkWell(
                                       onTap: () async {
-                                        await context.push(routingDetail, extra: book.id,);
+                                        await context.push(
+                                          routingDetail,
+                                          extra: book.id,
+                                        );
                                         ref.invalidate(favoriteBooksProvider);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
+                                          borderRadius: BorderRadius.circular(12),
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.black12,
@@ -93,12 +96,11 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                 ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(8),
-                                                  child:
-                                                      CachedNetworkImageWidget(
-                                                        imageUrl: book.imageUrl,
-                                                        width: 60,
-                                                        height: 90,
-                                                      ),
+                                                  child: CachedNetworkImageWidget(
+                                                    imageUrl: book.imageUrl,
+                                                    width: 60,
+                                                    height: 90,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -110,8 +112,7 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                 children: [
                                                   Row(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                        CrossAxisAlignment.start,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
@@ -166,8 +167,7 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                                                   Colors
                                                                       .redAccent,
                                                               padding:
-                                                                  EdgeInsets
-                                                                      .zero,
+                                                                  EdgeInsets.zero,
                                                               constraints:
                                                                   const BoxConstraints(),
                                                               splashRadius: 16,
@@ -199,17 +199,17 @@ class _FavoritePage extends ConsumerState<FavoritePage> {
                                           ],
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                                    ),
+                                  );
+                                },
+                              ),
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

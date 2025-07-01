@@ -26,6 +26,9 @@ final String offlineInfo = "You're offline. No more data loaded";
 final String oopsSomethingWrongConnection = 'Oops! Something went wrong: No Intenet Connection';
 final String bookNotFound = 'Book not found (404).';
 
+final String home = 'Home';
+final String search = 'Search';
+final String favorite = 'Favorite';
 final String routingIndex = '/';
 final String routingDetail = '/detail';
 final String routingSearch = '/search';

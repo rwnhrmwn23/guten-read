@@ -44,6 +44,7 @@ dev_dependencies:
   isar_generator:
     version: *isar_version
     hosted: https://pub.isar-community.dev/
+  path_provider_platform_interface: any
 
 flutter:
   uses-material-design: true

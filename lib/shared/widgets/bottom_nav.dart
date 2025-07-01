@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gutenread/shared/constants/style_constant.dart';
+import 'package:gutenread/shared/constants/text_constant.dart';
 
 import '../constants/color_constant.dart';
 
@@ -24,28 +25,28 @@ class BottomNav extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0:
-              context.go('/');
+              context.go(routingIndex);
               break;
             case 1:
-              context.go('/search');
+              context.go(routingSearch);
               break;
             case 2:
-              context.go('/favorite');
+              context.go(routingFavorite);
               break;
           }
         },
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded),
-            label: 'Home',
+            label: home,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search_rounded),
-            label: 'Search',
+            label: search,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book_rounded),
-            label: 'Favorite',
+            label: favorite,
           ),
         ],
       ),
