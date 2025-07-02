@@ -116,7 +116,7 @@ class BookLocalDataSource {
             .sectionEqualTo(section)
             .findFirst();
 
-    return meta?.lastPage ?? 0;
+    return meta?.lastPage ?? 1;
   }
 
   Future<void> insertSearchHistory(String query) async {
